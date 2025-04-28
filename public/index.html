@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Système de Gestion d'Assurance</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Système de Gestion d'Assurance</h1>
+      <nav>
+        <a href="#" class="active">Accueil</a>
+        <a href="/graphql">GraphQL Playground</a>
+        <a href="#documentation">Documentation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <h2>Plateforme de gestion d'assurance</h2>
+        <p>Système complet pour gérer les polices d'assurance, les bénéficiaires et les employés</p>
+        <a href="/graphql" class="btn btn-primary">Ouvrir GraphQL Playground</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Fonctionnalités principales</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Gestion des polices</h3>
+          <p>Créez et gérez des polices d'assurance</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3>Bénéficiaires</h3>
+          <p>Gérez les bénéficiaires principaux et secondaires</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍💼</div>
+          <h3>Employés</h3>
+          <p>Suivez les informations des employés et leurs polices</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏢</div>
+          <h3>Compagnies</h3>
+          <p>Gérez les informations des compagnies d'assurance</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="documentation" class="documentation">
+      <h2>Documentation API</h2>
+      <div class="doc-container">
+        <div class="doc-sidebar">
+          <ul>
+            <li><a href="#queries" class="active">Queries</a></li>
+            <li><a href="#mutations">Mutations</a></li>
+            <li><a href="#examples">Exemples</a></li>
+          </ul>
+        </div>
+        <div class="doc-content">
+          <div id="queries">
+            <h3>Queries disponibles</h3>
+            <pre><code>
+# Récupérer tous les employés
+query {
+  employes {
+    numero_employe
+    nom
+    adresse {
+      rue
+      ville
+      code_postale
+    }
+    policeAssurance {
+      numero_police
+    }
+  }
+}
+
+# Récupérer une police d'assurance et ses bénéficiaires
+query {
+  policeAssurance(numero_police: "P123") {
+    numero_police
+    beneficiairesPrincipaux {
+      id
+      nom
+    }
+    tousLesBeneficiaires {
+      id
+      nom
+    }
+  }
+}
+            </code></pre>
+          </div>
+          <div id="mutations" style="display: none;">
+            <h3>Mutations disponibles</h3>
+            <pre><code>
+# Créer une nouvelle adresse
+mutation {
+  createAdresse(input: {
+    rue: "123 Rue Principale"
+    ville: "Paris"
+    code_postale: "75001"
+  }) {
+    id
+    rue
+    ville
+    code_postale
+  }
+}
+
+# Créer un nouvel employé
+mutation {
+  createEmploye(input: {
+    numero_employe: "E001"
+    nom: "Jean Dupont"
+    numero_police_assurance: "P123"
+    adresse_id: 1
+  }) {
+    numero_employe
+    nom
+  }
+}
+            </code></pre>
+          </div>
+          <div id="examples" style="display: none;">
+            <h3>Exemples d'utilisation</h3>
+            <div class="example">
+              <h4>1. Créer une police d'assurance et ajouter des bénéficiaires</h4>
+              <pre><code>
+# 1. Créer une police d'assurance
+mutation {
+  createPoliceAssurance(input: {
+    numero_police: "P123"
+  }) {
+    numero_police
+  }
+}
+
+# 2. Créer des bénéficiaires
+mutation {
+  createBeneficiaire(input: {
+    nom: "Marie Dupont"
+  }) {
+    id
+    nom
+  }
+}
+
+# 3. Ajouter un bénéficiaire principal
+mutation {
+  addBeneficiairePrincipal(
+    police_assurance_id: "P123", 
+    beneficiaire_id: 1
+  ) {
+    police_assurance_id
+    beneficiaire_id
+  }
+}
+              </code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Système de Gestion d'Assurance</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Navigation tabs for documentation
+      const tabs = document.querySelectorAll('.doc-sidebar a');
+      const contents = document.querySelectorAll('.doc-content > div');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = tab.getAttribute('href').substring(1);
+          
+          // Update active tab
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Show target content, hide others
+          contents.forEach(content => {
+            content.style.display = content.id === targetId ? 'block' : 'none';
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
